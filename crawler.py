@@ -1,7 +1,14 @@
 from model import db, Author, News, db_session
+import urllib
 
 class Craww:
     def craw(self):
+
+        tech_rss_url = "http://feeds.feedburner.com/TechCrunch/"
+
+        #f = urllib.urlopen(link)
+        #myfile = f.read()
+        #print myfile
         
         author_name = "John Last"
         author_bio = "some somethign about some shit"
