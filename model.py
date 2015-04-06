@@ -29,6 +29,7 @@ class NewsAuthor(db.Model):
 class News(db.Model):
     __tablename__ = 'news'
     id = db.Column('id', db.Integer, primary_key=True)
+    url = db.Column(db.String)
     title = db.Column(db.String)
     content = db.Column(db.Text)
     published_on = db.Column(db.DateTime())
@@ -40,5 +41,7 @@ class News(db.Model):
 class Author(db.Model):
     __tablename__ = 'author'
     id = db.Column('id', db.Integer, primary_key=True)
+    url = db.Column(db.String)
     name = db.Column(db.String(100))
+    twitter = db.Column(db.String)
     bio = db.Column(db.Text())
