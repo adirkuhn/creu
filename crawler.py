@@ -39,7 +39,7 @@ class Craww:
 
         re_title = re.compile(r'<h1.*>(.*)</h1', re.S)
         re_content = re.compile(r'<!-- Begin: Wordpress Article Content -->(.*)<!-- End: Wordpress Article Content -->', re.S)
-        re_published = re.compile(r'name="sailthru.date"\scontent="(.*)"')
+        re_published = re.compile(r'name="sailthru.date"\scontent="(.*?)"')
         re_author = re.compile(r'<a\shref="(.*?)"\stitle.*?rel="author">(.*?)<\/a>.*?rel="external">(.*?)<\/a>')
 
         match_title = re.search(re_title, tech_content)
