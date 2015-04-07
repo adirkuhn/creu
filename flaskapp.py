@@ -13,6 +13,44 @@ app.config.from_pyfile('flaskapp.cfg')
 def index():
     return render_template('index.html')
 
+@app.route('/authors', methods=['GET'])
+@app.route('/author/<author_id>', methods=['GET'])
+def get_authors(author_id=0):
+
+    ret = []
+
+    if (author_id > 0):
+        author = Author.query.filter(Author.id == author_id).first()
+
+        if (isinstance(author, Author) == False):
+            return jsonify(response='resource not found'), 404
+
+        a = {
+            'id': author.id,
+            'name': author.name,
+            'twitter': author.twitter,
+            'url': author.url,
+            'bio': author.bio
+        }
+
+        ret.append(a)
+
+    else:
+
+        authors = Author.query.all()
+
+        for a in authors:
+            ret.append({
+                'id': a.id,
+                'name': a.name,
+                'twitter': a.twitter,
+                'url': a.url,
+                'bio': a.bio
+            })
+
+        return jsonify(response=ret)
+
+
 @app.route('/news', methods=['GET'])
 @app.route('/news/<news_id>', methods=['GET'])
 def get_news(news_id=0):
@@ -20,7 +58,6 @@ def get_news(news_id=0):
     ret = []
 
     if (news_id > 0):
-        print 'loko'
         news = News.query.filter(News.id == news_id).first()
 
         if (isinstance(news, News) == False):
@@ -44,7 +81,6 @@ def get_news(news_id=0):
             ret.append(new)
 
     else:
-        print 'mais loko'
         news = News.query.all()
 
         for n in news:
