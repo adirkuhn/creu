@@ -2,8 +2,9 @@ import os
 import sys
 from datetime import datetime
 from flask import Flask, request, flash, url_for, redirect, \
-     render_template, abort, send_from_directory
+     render_template, abort, send_from_directory, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from model import db, Author, News, NewsAuthor
 
 app = Flask(__name__)
 app.config.from_pyfile('flaskapp.cfg')
@@ -12,13 +13,60 @@ app.config.from_pyfile('flaskapp.cfg')
 def index():
     return render_template('index.html')
 
-@app.route('/<path:resource>')
-def serveStaticResource(resource):
-    return send_from_directory('static/', resource)
+@app.route('/news', methods=['GET'])
+@app.route('/news/<news_id>', methods=['GET'])
+def get_news(news_id=0):
 
-@app.route("/test")
-def test():
-    return "<strong>It's Alive!</strong>"
+    ret = []
+
+    if (news_id > 0):
+        print 'loko'
+        news = News.query.filter(News.id == news_id).first()
+
+        if (isinstance(news, News) == False):
+            return jsonify(response='resource not found'), 404
+
+        new = {
+            'id': news.id,
+            'title': news.title,
+            'content': news.content,
+            'published_on': news.published_on,
+            'authors': []
+        }
+
+        for a in news.author:
+            new['authors'].append({
+                'id': a.id,
+                'name': a.name,
+                'twitter': a.twitter
+            })
+
+            ret.append(new)
+
+    else:
+        print 'mais loko'
+        news = News.query.all()
+
+        for n in news:
+
+            new = {
+                'id': n.id,
+                'title': n.title,
+                'content': n.content,
+                'published_on': n.published_on,
+                'authors': []
+            }
+
+            for a in n.author:
+                new['authors'].append({
+                    'id': a.id,
+                    'name': a.name,
+                    'twitter': a.twitter
+                })
+
+            ret.append(new)
+
+    return jsonify(response=ret)
 
 def initdb():
     db.create_all()

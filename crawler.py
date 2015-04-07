@@ -1,4 +1,4 @@
-from model import db, Author, News, db_session
+from model import db, Author, News
 from xml.dom.minidom import parse, parseString
 import urllib
 import re
@@ -29,8 +29,6 @@ class Craww:
         return
 
     def crawNews(self, url):
-        ##tech = urllib.urlopen(url)
-        #tech_content = tech.read()
         cleaner = Cleaner()
         cleaner.javascript = True
         cleaner.style = True
@@ -68,11 +66,6 @@ class Craww:
         if (isinstance(author, Author) == False):
             author = self.save_author(author_url, author_name, author_twitter, '')
 
-        print "=========================="
-        print "news " + news.id.__str__()
-        print "athor" + author.id.__str__()
-        print "============================"
-
         self.newsAuthor(news, author)
 
     def findAuthorByUrl(self, url):
@@ -86,8 +79,8 @@ class Craww:
 
         if (isinstance(aauthor, Author) == False):
             news.author.append(author)
-            db_session.commit()
-            db_session.refresh(news)
+            db.session.commit()
+            db.session.refresh(news)
 
         return news
 
@@ -100,9 +93,9 @@ class Craww:
             news.content = content
             news.published_on = published_on
 
-            db_session.add(news)
-            db_session.commit()
-            db_session.refresh(news)
+            db.session.add(news)
+            db.session.commit()
+            db.session.refresh(news)
 
         return news
 
@@ -115,9 +108,9 @@ class Craww:
             author.twitter = author_twitter
             author.bio = author_bio
 
-            db_session.add(author)
-            db_session.commit()
-            db_session.refresh(author)
+            db.session.add(author)
+            db.session.commit()
+            db.session.refresh(author)
 
         return author
 
