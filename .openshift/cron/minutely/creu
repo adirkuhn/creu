@@ -1,3 +1,4 @@
 #!/bin/bash
-python ../../../crawler.py > $OPENSHIFT_PYTHON_LOG_DIR/creu_log
+cd $OPENSHIFT_REPO_DIR
+python crawler.py > $OPENSHIFT_PYTHON_LOG_DIR/creu_log
 date > $OPENSHIFT_PYTHON_LOG_DIR/last_date_cron_ran
